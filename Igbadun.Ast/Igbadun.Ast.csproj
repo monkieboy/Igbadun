@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>Igbadun.Ast</AssemblyName>
+        <RootNamespace>Igbadun.Ast</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Igbadun\Igbadun.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <WarnOn>3390;$(WarnOn)</WarnOn>
+        <RootNamespace>Parsing</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Expr.fs" />
+        <Compile Include="Parser.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Igbadun.Ast\Igbadun.Ast.csproj" />
+      <ProjectReference Include="..\Igbadun\Igbadun.csproj" />
+    </ItemGroup>
+
+</Project>
