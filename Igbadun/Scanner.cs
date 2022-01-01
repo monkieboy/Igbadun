@@ -95,11 +95,12 @@ namespace Igbadun
                     
                     break;
                 case '=': AddToken(EQUAL); break;
-                case '<': 
-                    AddToken(
-                        Match('=')
-                            ? LESS_OR_EQUAL
-                            : LESS);
+                case '<':
+                    var lessOrEqual = Match('=')
+                        ? LESS_OR_EQUAL
+                        : LESS;
+                    var mutateOrEval = Match('-') ? MUTABLE : lessOrEqual;
+                    AddToken(mutateOrEval);
                     break;
                 case '>': 
                     AddToken(

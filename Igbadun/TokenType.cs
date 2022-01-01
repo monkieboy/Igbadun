@@ -17,7 +17,7 @@ namespace Igbadun
         
         AND, OR, TRUE, FALSE, IF, ELSE, FUN, NIL,
         
-        VAL, MUTABLE, 
+        VAL, MUTABLE,
         
         RETURN,
         

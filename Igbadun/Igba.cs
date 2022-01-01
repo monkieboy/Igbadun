@@ -61,7 +61,7 @@ namespace Igbadun
             {
                 Console.Write("> ");
                 var cmd = Console.ReadLine();
-                if (cmd is "exit" or "quit" or ":q") break;
+                if (cmd is "exit" or "quit" or ":q" or ":Q") break;
                 Run(cmd);
                 Errored = false;
                 RuntimeErrored = false;

@@ -113,6 +113,13 @@ namespace Igbadun
             throw new RuntimeError(op, $"The operand arguments are not Doubles; left operand '{leftOperand}' is type {leftOperand.GetType()} and right operand '{rightOperand}' is type {rightOperand.GetType()}");
         }
 
+        public object VisitAssignExpr(Expr.Assign expr)
+        {
+            var value = Evaluate(expr.value);
+            environment.Assign(expr.name, value);
+            return value;
+        }
+
         public object VisitBinaryExpr(Expr.Binary expr)
         {
             var left = Evaluate(expr.left);

@@ -125,6 +125,7 @@ namespace Igbadun
             return expr;
         }
 
+        
         Expr Comparison()
         {
             var expr = Term();
@@ -151,7 +152,26 @@ namespace Igbadun
             return expr;
         }
 
-        private Expr Expression() => Equality();
+        private Expr Assignment()
+        {
+            var expr = Equality();
+            if (Match(EQUAL, MUTABLE)) // here to apply fix
+            {
+                var equals = Previous();
+                var value = Assignment();
+
+                if (expr is Expr.Mutable)
+                {
+                    var name = ((Expr.Mutable) expr).name;
+                    return new Expr.Assign(name, value);
+                }
+
+                Error(equals, "Invalid assignment target.");
+            }
+
+            return expr;
+        }
+        private Expr Expression() => Assignment();
 
         private Stmt PrintStatement()
         {

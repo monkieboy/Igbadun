@@ -3,11 +3,25 @@ namespace Igbadun {
 
     public abstract class Expr {
         public interface IVisitor<T> {
+            T VisitAssignExpr(Assign expr);
             T VisitBinaryExpr(Binary expr);
             T VisitGroupingExpr(Grouping expr);
             T VisitLiteralExpr(Literal expr);
             T VisitUnaryExpr(Unary expr);
             T VisitMutableExpr(Mutable expr);
+        }
+        public class Assign : Expr {
+            public Assign(Token name, Expr value) {
+                this.name = name;
+                this.value = value;
+            }
+
+            public override T Accept<T>(IVisitor<T> visitor) {
+                return visitor.VisitAssignExpr(this);
+            }
+
+            public readonly Token name;
+            public readonly Expr value;
         }
         public class Binary : Expr {
             public Binary(Expr left, Token op, Expr right) {

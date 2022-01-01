@@ -17,5 +17,16 @@ namespace Igbadun
 
             throw new RuntimeError(name, $"Undefined mutable '{name.Lexeme}'.");
         }
+
+        public void Assign(Token name, object value)
+        {
+            if (mutables.ContainsKey(name.Lexeme))
+            {
+                mutables[name.Lexeme] = value;
+                return;
+            }
+
+            throw new RuntimeError(name, $"Undefined variable {name.Lexeme}.");
+        }
     }
 }

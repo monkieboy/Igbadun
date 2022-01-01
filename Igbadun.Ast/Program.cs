@@ -10,7 +10,7 @@ namespace Igbadun.Ast
 
         private static void Main(string[] args)
         {
-            if (args[0] == "T")
+            if (args.Length > 0 && args[0] == "T")
             {
                 var e = new Expr.Binary(
                     new Expr.Unary(
@@ -30,6 +30,7 @@ namespace Igbadun.Ast
             var outputDir = args[0];
             DefineAst(outputDir, "Expr", new List<string>
             {
+                "Assign   : Token name, Expr value",
                 "Binary   : Expr left, Token op, Expr right",
                 "Grouping : Expr expression",
                 "Literal  : object value",
@@ -40,8 +41,8 @@ namespace Igbadun.Ast
             DefineAst(outputDir, "Stmt", new List<string>
             {
                 "Expression : Expr expression",
-                "Print : Expr expression",
-                "Mutable : Token name, Expr initialiser"
+                "Print      : Expr expression",
+                "Mutable    : Token name, Expr initialiser"
             });
         }
 

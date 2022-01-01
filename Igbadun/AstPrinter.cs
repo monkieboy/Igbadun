@@ -31,6 +31,11 @@ namespace Igbadun
             throw new System.NotImplementedException();
         }
 
+        public string VisitAssignExpr(Expr.Assign expr)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public string VisitBinaryExpr(Expr.Binary expr)
         {
             return Parenthesize(expr.op.Lexeme, expr.left, expr.right);
