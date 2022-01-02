@@ -10,17 +10,6 @@ namespace Igbadun.Ast
 
         private static void Main(string[] args)
         {
-            if (args.Length > 0 && args[0] == "T")
-            {
-                var e = new Expr.Binary(
-                    new Expr.Unary(
-                        new Token(TokenType.MINUS, "-", null, 1),
-                        new Expr.Literal(123)),
-                    new Token(TokenType.STAR, "*", null, 1),
-                    new Expr.Grouping(new Expr.Literal(45.67)));
-                Console.WriteLine(new AstPrinter().Print(e));
-                return;
-            }
             if (args.Length != 1)
             {
                 Console.Error.WriteLine("Usage: gen <output directory>");
@@ -30,13 +19,13 @@ namespace Igbadun.Ast
             var outputDir = args[0];
             DefineAst(outputDir, "Expr", new List<string>
             {
-                "Assign   : Token name, Expr value",
-                "Binary   : Expr left, Token op, Expr right",
-                "Grouping : Expr expression",
-                "Literal  : object value",
-                "Unary    : Token op, Expr right",
-                "Mutable  : Token name",
-                "Value    : Token name"
+                "Assign   : Token Name, Expr Val",
+                "Binary   : Expr Left, Token Op, Expr Right",
+                "Grouping : Expr Expr",
+                "Literal  : object Val",
+                "Unary    : Token Op, Expr Right",
+                "Mutable  : Token Name",
+                "Value    : Token Name"
             });
             
             DefineAst(outputDir, "Stmt", new List<string>
@@ -95,7 +84,7 @@ namespace Igbadun.Ast
             foreach (var field in fields.Split(", "))
             {
                 var fieldName = field.Split(" ")[1];
-                fileWriter.WriteLine($"{Indent}{Indent}{Indent}{Indent}this.{fieldName} = {fieldName};");
+                fileWriter.WriteLine($"{Indent}{Indent}{Indent}{Indent}{fieldName} = {fieldName};");
             }
             fileWriter.WriteLine($"{Indent}{Indent}{Indent}}}");
 

@@ -48,13 +48,13 @@ namespace Igbadun
 
         public object VisitExpressionStmt(Stmt.Expression stmt)
         {
-            Evaluate(stmt.expression);
+            Evaluate(stmt.Expr);
             return null;
         }
 
         public object VisitPrintStmt(Stmt.Print stmt)
         {
-            var text = Evaluate(stmt.expression);
+            var text = Evaluate(stmt.Expr);
             Console.WriteLine(Stringify(text));
             return null;
         }

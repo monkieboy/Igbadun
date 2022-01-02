@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rootDir", "rootDir", "{7FD2020D-FE57-4415-B604-87CB1C8D0EF0}"
 ProjectSection(SolutionItems) = preProject
 	igba = igba
+	gen = gen
 EndProjectSection
 EndProject
 Global

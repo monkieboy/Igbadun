@@ -7,7 +7,6 @@ namespace Igbadun
     internal static class Igba
     {
         private static readonly Interpreter Interpreter = new();
-        private static bool showParse = false;
 
         private static void Main(string[] args)
         {
@@ -23,7 +22,6 @@ namespace Igbadun
                     break;
 
                 default:
-                    //showParse = true;
                     RunRepl();
                     break;
             }
@@ -39,11 +37,6 @@ namespace Igbadun
 
             Interpreter.Interpret(statements);
             if(RuntimeErrored) System.Environment.Exit(70);
-
-            if (showParse)
-            {
-                Console.WriteLine(new AstPrinter().Print(statements));
-            }
         }
 
         private static void RunFile(string filePath)

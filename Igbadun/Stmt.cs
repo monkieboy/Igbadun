@@ -8,30 +8,30 @@ namespace Igbadun {
         }
         public class Expression : Stmt {
             public Expression(Expr expression) {
-                this.expression = expression;
+                Expr = expression;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
                 return visitor.VisitExpressionStmt(this);
             }
 
-            public readonly Expr expression;
+            public readonly Expr Expr;
         }
         public class Print : Stmt {
             public Print(Expr expression) {
-                this.expression = expression;
+                Expr = expression;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
                 return visitor.VisitPrintStmt(this);
             }
 
-            public readonly Expr expression;
+            public readonly Expr Expr;
         }
         public class Mutable : Stmt {
             public Mutable(Token name, Expr initialiser) {
-                this.Name = name;
-                this.Initialiser = initialiser;
+                Name = name;
+                Initialiser = initialiser;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
@@ -43,8 +43,8 @@ namespace Igbadun {
         }
         public class Value : Stmt {
             public Value(Token name, Expr initialiser) {
-                this.Name = name;
-                this.Initialiser = initialiser;
+                Name = name;
+                Initialiser = initialiser;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
