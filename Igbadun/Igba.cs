@@ -14,7 +14,7 @@ namespace Igbadun
             switch (args.Length)
             {
                 case > 2:
-                    Console.WriteLine("To use this program: igba [script]");
+                    Console.WriteLine("To use this program: ./igba [script] or ./igba for the repl");
                     System.Environment.Exit(64);
                     break;
              
