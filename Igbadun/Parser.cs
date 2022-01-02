@@ -7,7 +7,7 @@ namespace Igbadun
     public class Parser
     {
         private readonly List<Token> tokens;
-        private int current = 0;
+        private int current;
         
         public Parser(List<Token> tokens)
         {
@@ -32,7 +32,7 @@ namespace Igbadun
 
         private bool Match(params TokenType[] types)
         {
-            if (!types.Any(t=> Check(t))) return false;
+            if (!types.Any(Check)) return false;
             Advance();
             return true;
         }
@@ -152,17 +152,37 @@ namespace Igbadun
             return expr;
         }
 
-        private Expr Assignment()
+        private Expr Immutable()
         {
             var expr = Equality();
+            if (Match(VAL))
+            {
+                var equals = Previous();
+                var assignment = Assignment();
+
+                if (expr is Expr.Value value)
+                {
+                    var name = value.Name;
+                    return new Expr.Assign(name, assignment);
+                }
+
+                Error(equals, "Invalid assignment target.");
+            }
+
+            return expr;
+        }
+
+        private Expr Assignment()
+        {
+            var expr = Immutable();
             if (Match(EQUAL, MUTABLE)) // here to apply fix
             {
                 var equals = Previous();
                 var value = Assignment();
 
-                if (expr is Expr.Mutable)
+                if (expr is Expr.Mutable mutable)
                 {
-                    var name = ((Expr.Mutable) expr).name;
+                    var name = mutable.Name;
                     return new Expr.Assign(name, value);
                 }
 
@@ -198,24 +218,36 @@ namespace Igbadun
             return ExpressionStatement();
         }
 
-        private Stmt MutableDeclaration()
+        private Stmt ValueDeclaration()
         {
-            var name = Consume(IDENTIFIER, "Expected a variable name.");
+            var name = Consume(IDENTIFIER, "Expected a val name.");
             Expr initialiser = null;
             if (Match(EQUAL))
             {
                 initialiser = Expression();
             }
 
-            Consume(SEMI_COLON, "Expected a ';' after the variable declaration.");
+            Consume(SEMI_COLON, "Expected a ';' after the val declaration.");
+            return new Stmt.Value(name, initialiser);
+        }
+        private Stmt MutableDeclaration()
+        {
+            var name = Consume(IDENTIFIER, "Expected a mutable name.");
+            Expr initialiser = null;
+            if (Match(EQUAL))
+            {
+                initialiser = Expression();
+            }
+
+            Consume(SEMI_COLON, "Expected a ';' after the mutable declaration.");
             return new Stmt.Mutable(name, initialiser);
         }
         private Stmt Declaration()
         {
             try
             {
-                if (Match(MUTABLE)) return MutableDeclaration();
-                return Statement();
+                if (Match(VAL)) return ValueDeclaration(); 
+                return Match(MUTABLE) ? MutableDeclaration() : Statement();
             }
             catch (ParseError)
             {
@@ -233,17 +265,5 @@ namespace Igbadun
 
             return statements;
         }
-        
-        // public Expr Parse()
-        // {
-        //     try
-        //     {
-        //         return Expression();
-        //     }
-        //     catch (ParseError)
-        //     {
-        //         return null;
-        //     }
-        // }
     }
 }

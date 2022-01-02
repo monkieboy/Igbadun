@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using static Igbadun.Scanner;
 
@@ -62,9 +61,23 @@ namespace Igbadun
                 Console.Write("> ");
                 var cmd = Console.ReadLine();
                 if (cmd is "exit" or "quit" or ":q" or ":Q") break;
-                Run(cmd);
-                Errored = false;
-                RuntimeErrored = false;
+                try
+                {
+                    var scanner = new Scanner(cmd);
+                    var tokens = scanner.ScanTokens();
+                    var parser = new Parser(tokens);
+                    var statements = parser.Parse();
+                    Interpreter.Interpret(statements);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    Errored = false;
+                    RuntimeErrored = false;
+                }
             }
 
             Console.WriteLine("exiting...");

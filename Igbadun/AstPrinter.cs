@@ -31,6 +31,11 @@ namespace Igbadun
             throw new System.NotImplementedException();
         }
 
+        public object VisitValueStmt(Stmt.Value stmt)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public string VisitAssignExpr(Expr.Assign expr)
         {
             throw new System.NotImplementedException();
@@ -38,26 +43,31 @@ namespace Igbadun
 
         public string VisitBinaryExpr(Expr.Binary expr)
         {
-            return Parenthesize(expr.op.Lexeme, expr.left, expr.right);
+            return Parenthesize(expr.Op.Lexeme, expr.Left, expr.Right);
         }
 
         public string VisitGroupingExpr(Expr.Grouping expr)
         {
-            return Parenthesize("group", expr.expression);
+            return Parenthesize("group", expr.Expr);
         }
 
         public string VisitLiteralExpr(Expr.Literal expr)
         {
-            if (expr.value == null) return "nil";
-            return expr.value.ToString();
+            if (expr.Val == null) return "nil";
+            return expr.Val.ToString();
         }
 
         public string VisitUnaryExpr(Expr.Unary expr)
         {
-            return Parenthesize(expr.op.Lexeme, expr.right);
+            return Parenthesize(expr.Op.Lexeme, expr.Right);
         }
 
         public string VisitMutableExpr(Expr.Mutable expr)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VisitValueExpr(Expr.Value expr)
         {
             throw new System.NotImplementedException();
         }

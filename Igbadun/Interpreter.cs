@@ -62,37 +62,54 @@ namespace Igbadun
         public object VisitMutableStmt(Stmt.Mutable stmt)
         {
             object value = null;
-            if (stmt.initialiser != null)
+            if (stmt.Initialiser != null)
             {
-                value = Evaluate(stmt.initialiser);
+                value = Evaluate(stmt.Initialiser);
             }
 
-            environment.Define(stmt.name.Lexeme, value);
+            environment.Define(stmt.Name.Lexeme, value);
+            return null;
+        }
+
+        public object VisitValueStmt(Stmt.Value stmt)
+        {
+            object value = null;
+            if (stmt.Initialiser != null)
+            {
+                value = Evaluate(stmt.Initialiser);
+            }
+
+            environment.Values.Define(stmt.Name.Lexeme, value);
             return null;
         }
 
         public object VisitMutableExpr(Expr.Mutable expr)
         {
-            return environment.Get(expr.name);
+            return environment.Get(expr.Name);
         }
-        
+
+        public object VisitValueExpr(Expr.Value expr)
+        {
+            return environment.Values.Get(expr.Name);
+        }
+
         public object VisitLiteralExpr(Expr.Literal expr)
         {
-            return expr.value;
+            return expr.Val;
         }
 
         public object VisitGroupingExpr(Expr.Grouping expr)
         {
-            return Evaluate(expr.expression);
+            return Evaluate(expr.Expr);
         }
 
         public object VisitUnaryExpr(Expr.Unary expr)
         {
-            var right = Evaluate(expr.right);
-            switch (expr.op.TokenType)
+            var right = Evaluate(expr.Right);
+            switch (expr.Op.TokenType)
             {
                 case TokenType.MINUS:
-                    CheckNumericOp(expr.op, right);
+                    CheckNumericOp(expr.Op, right);
                     return -(double) right;
                 case TokenType.BANG:
                     return !IsTruthy(right);
@@ -115,55 +132,55 @@ namespace Igbadun
 
         public object VisitAssignExpr(Expr.Assign expr)
         {
-            var value = Evaluate(expr.value);
-            environment.Assign(expr.name, value);
+            var value = Evaluate(expr.Val);
+            environment.Assign(expr.Name, value);
             return value;
         }
 
         public object VisitBinaryExpr(Expr.Binary expr)
         {
-            var left = Evaluate(expr.left);
-            var right = Evaluate(expr.right);
+            var left = Evaluate(expr.Left);
+            var right = Evaluate(expr.Right);
 
-            switch (expr.op.TokenType)
+            switch (expr.Op.TokenType)
             {
                 case TokenType.PLUS:
                     return left switch
                     {
                         string s1 when right is string s2 => s1 + s2,
                         double d1 when right is double d2 => d1 + d2,
-                        _ => throw new RuntimeError(expr.op, $"Operands must two numbers or two strings, numeric or string. The left operand '{left}' is type of {left.GetType()} and the right operand '{right}' is type of {right.GetType()}.")
+                        _ => throw new RuntimeError(expr.Op, $"Operands must two numbers or two strings, numeric or string. The left operand '{left}' is type of {left.GetType()} and the right operand '{right}' is type of {right.GetType()}.")
                     };
                 case TokenType.MINUS:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left - (double) right;      
                 case TokenType.STAR:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left * (double) right;      
                 case TokenType.FORWARD_SLASH:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left / (double) right;      
                 case TokenType.PERCENT:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left % (double) right;      
                 case TokenType.POWER:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return Math.Pow((double) left, (double) right);
                 case TokenType.EQUAL:
                     return IsEqual(left, right);
                 case TokenType.GREATER:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left > (double) right;      
                 case TokenType.LESS:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left < (double) right;
                 case TokenType.NOT_EQUAL:
                     return !IsEqual(left, right);      
                 case TokenType.GREATER_OR_EQUAL:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left >= (double) right;      
                 case TokenType.LESS_OR_EQUAL:
-                    CheckNumericOp(expr.op,left,right);
+                    CheckNumericOp(expr.Op,left,right);
                     return (double) left <= (double) right;      
                 default:
                     return null;

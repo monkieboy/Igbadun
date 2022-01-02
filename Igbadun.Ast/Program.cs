@@ -35,14 +35,16 @@ namespace Igbadun.Ast
                 "Grouping : Expr expression",
                 "Literal  : object value",
                 "Unary    : Token op, Expr right",
-                "Mutable  : Token name"
+                "Mutable  : Token name",
+                "Value    : Token name"
             });
             
             DefineAst(outputDir, "Stmt", new List<string>
             {
                 "Expression : Expr expression",
                 "Print      : Expr expression",
-                "Mutable    : Token name, Expr initialiser"
+                "Mutable    : Token name, Expr initialiser",
+                "Value      : Token name, Expr initialiser"
             });
         }
 

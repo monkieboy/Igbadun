@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static Igbadun.TokenType;
 
 namespace Igbadun
@@ -79,7 +78,8 @@ namespace Igbadun
                 case '/': AddToken(FORWARD_SLASH); break;
                 case '\\': AddToken(BACK_SLASH); break;
                 case ';': AddToken(SEMI_COLON); break;
-                case ':': AddToken(COLON); break;
+                case ':': 
+                    AddToken(COLON); break;
                 case '#':
                     while (Peek() != '\n' && !IsEndOfSource())
                     {
