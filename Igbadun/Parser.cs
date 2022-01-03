@@ -212,9 +212,23 @@ namespace Igbadun
             Consume(SEMI_COLON, "Expected a ';' after value.");
         }
 
+        private List<Stmt> Block()
+        {
+            var statements = new List<Stmt>();
+
+            while (!Check(RIGHT_BRACE) && !IsEndOfSource())
+            {
+                statements.Add(Declaration());
+            }
+
+            Consume(RIGHT_BRACE, "Expected a '}' after block.");
+            return statements;
+        }
+
         private Stmt Statement()
         {
             if (Match(PRINT)) return PrintStatement();
+            if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
             return ExpressionStatement();
         }
 

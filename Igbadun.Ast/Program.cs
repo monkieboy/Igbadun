@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Igbadun.Ast
 {
@@ -13,7 +14,7 @@ namespace Igbadun.Ast
             if (args.Length != 1)
             {
                 Console.Error.WriteLine("Usage: gen <output directory>");
-                System.Environment.Exit(64);
+                Environment.Exit(64);
             }
 
             var outputDir = args[0];
@@ -30,10 +31,11 @@ namespace Igbadun.Ast
             
             DefineAst(outputDir, "Stmt", new List<string>
             {
-                "Expression : Expr expression",
-                "Print      : Expr expression",
-                "Mutable    : Token name, Expr initialiser",
-                "Value      : Token name, Expr initialiser"
+                "Block      : List<Stmt> Statements",
+                "Expression : Expr Expr",
+                "Print      : Expr Expr",
+                "Mutable    : Token Name, Expr Initialiser",
+                "Value      : Token Name, Expr Initialiser"
             });
         }
 
@@ -43,7 +45,7 @@ namespace Igbadun.Ast
             var fileWriter = new StringWriter();
             fileWriter.WriteLine("namespace Igbadun {");
             
-            fileWriter.WriteLine($"{Indent}using Igbadun;");
+            fileWriter.WriteLine($"{Indent}using System.Collections.Generic;");
             fileWriter.WriteLine();
             
             fileWriter.WriteLine($"{Indent}public abstract class {name} {{");
@@ -68,7 +70,7 @@ namespace Igbadun.Ast
 
         private static void DefineVisitor(StringWriter fileWriter, string name, List<string> types)
         {
-            fileWriter.WriteLine($"{Indent}{Indent}public interface IVisitor<T> {{");
+            fileWriter.WriteLine($"{Indent}{Indent}public interface IVisitor<out T> {{");
             foreach (var type in types)
             {
                 var typeName = type.Split(":")[0].Trim();
@@ -79,12 +81,14 @@ namespace Igbadun.Ast
 
         private static void DefineType(StringWriter fileWriter, string name, string className, string fields)
         {
+            var lowerCaseCtorArgsArray = fields.Split(' ').Select((x,n) => n%2!=0?x.ToLower() : x);
+            var lowerCaseCtorArgs = String.Join(' ', lowerCaseCtorArgsArray);
             fileWriter.WriteLine($"{Indent}{Indent}public class {className} : {name} {{");
-            fileWriter.WriteLine($"{Indent}{Indent}{Indent}public {className}({fields}) {{");
+            fileWriter.WriteLine($"{Indent}{Indent}{Indent}public {className}({lowerCaseCtorArgs}) {{");
             foreach (var field in fields.Split(", "))
             {
                 var fieldName = field.Split(" ")[1];
-                fileWriter.WriteLine($"{Indent}{Indent}{Indent}{Indent}{fieldName} = {fieldName};");
+                fileWriter.WriteLine($"{Indent}{Indent}{Indent}{Indent}{fieldName} = {fieldName.ToLower()};");
             }
             fileWriter.WriteLine($"{Indent}{Indent}{Indent}}}");
 

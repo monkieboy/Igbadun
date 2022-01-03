@@ -6,7 +6,7 @@ namespace Igbadun
 {
     public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
-        private readonly Environment environment = new ();
+        private Environment environment = new ();
 
         private void Execute(Stmt stmt)
         {
@@ -44,6 +44,28 @@ namespace Igbadun
             }
 
             return o.ToString();
+        }
+
+        private void ExecuteBlock(List<Stmt> statements, Environment env)
+        {
+            var previous = environment;
+            try
+            {
+                environment = env;
+                foreach (var statement in statements)
+                {
+                    Execute(statement);
+                }
+            }
+            finally
+            {
+                environment = previous;
+            }
+        }
+        public object VisitBlockStmt(Stmt.Block stmt)
+        {
+            ExecuteBlock(stmt.Statements, new Environment(environment));
+            return null;
         }
 
         public object VisitExpressionStmt(Stmt.Expression stmt)

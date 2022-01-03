@@ -1,4 +1,6 @@
 namespace Igbadun {
+    using System.Collections.Generic;
+
     public abstract class Expr {
         public interface IVisitor<out T> {
             T VisitAssignExpr(Assign expr);
@@ -10,9 +12,9 @@ namespace Igbadun {
             T VisitValueExpr(Value expr);
         }
         public class Assign : Expr {
-            public Assign(Token name, Expr value) {
+            public Assign(Token name, Expr val) {
                 Name = name;
-                Val = value;
+                Val = val;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
@@ -38,8 +40,8 @@ namespace Igbadun {
             public readonly Expr Right;
         }
         public class Grouping : Expr {
-            public Grouping(Expr expression) {
-                Expr = expression;
+            public Grouping(Expr expr) {
+                Expr = expr;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
@@ -49,8 +51,8 @@ namespace Igbadun {
             public readonly Expr Expr;
         }
         public class Literal : Expr {
-            public Literal(object value) {
-                Val = value;
+            public Literal(object val) {
+                Val = val;
             }
 
             public override T Accept<T>(IVisitor<T> visitor) {
@@ -83,8 +85,8 @@ namespace Igbadun {
 
             public readonly Token Name;
         }
-        public abstract class Value : Expr {
-            protected Value(Token name) {
+        public class Value : Expr {
+            public Value(Token name) {
                 Name = name;
             }
 

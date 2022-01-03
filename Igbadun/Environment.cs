@@ -4,6 +4,16 @@ namespace Igbadun
 {
     public class Environment
     {
+        private Environment enclosing;
+
+        public Environment()
+        {
+            enclosing = null;
+        }
+        public Environment(Environment enclosing)
+        {
+            this.enclosing = enclosing;
+        }
         private readonly Dictionary<string, object> mutables = new();
         public Values Values { get; } = new();
 
@@ -20,6 +30,8 @@ namespace Igbadun
                 return Values.Get(name);
             }
 
+            if (enclosing != null) return enclosing.Get(name);
+
             throw new RuntimeError(name, $"Undefined mutable '{name.Lexeme}'.");
         }
 
@@ -28,6 +40,12 @@ namespace Igbadun
             if (mutables.ContainsKey(name.Lexeme))
             {
                 mutables[name.Lexeme] = value;
+                return;
+            }
+
+            if (enclosing != null)
+            {
+                enclosing.Assign(name,value);
                 return;
             }
 

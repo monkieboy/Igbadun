@@ -7,8 +7,4 @@
         <RootNamespace>Igbadun.Ast</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Igbadun\Igbadun.csproj" />
-    </ItemGroup>
-
 </Project>
